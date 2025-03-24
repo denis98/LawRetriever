@@ -11,18 +11,11 @@ from langchain.chains.query_constructor.base import (
 )
 
 
-k = 5 # Number of retrieved results
 queryembeddings = LawEmbeddings(embed_type="query")
-
 querystore = Chroma(
     client=client,
     collection_name=collection_name,
     embedding_function=queryembeddings,
-)
-
-retriever = querystore.as_retriever(
-    search_type="mmr",
-    search_kwargs={"k": k, "fetch_k": k, "lambda_mult": 0.5},
 )
 
 
@@ -63,7 +56,6 @@ def paragraph_retriever(llm):
     ]
     
     document_content_description = "Full-Text of german laws. Be precise while querying information."
-    
     
     prompt = get_query_constructor_prompt(
         document_contents=document_content_description,
